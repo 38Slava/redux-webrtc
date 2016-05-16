@@ -55,6 +55,10 @@ webpackConfig.plugins = [
     minify: {
       collapseWhitespace: true
     }
+  }),
+  new webpack.ProvidePlugin({
+    React: 'react',
+    _: 'lodash'
   })
 ]
 
