@@ -30,12 +30,10 @@ const loginPromise = (name) => {
   return new Promise((resolve, reject) => {
     if (name) {
       resolve({
-        name,
-        avatar: `https://robohash.org/${name}.png?size=100x100`
+        name
       })
     } else {
       let err = new Error('Name field is empty!')
-      // err.message = 'Name field is empty!'
       reject(err.message)
     }
   })
@@ -55,9 +53,8 @@ export const login = (name) => {
   }
 }
 
-const saveUser = ({name, avatar}) => {
+const saveUser = ({ name }) => {
   localStorage.setItem('name', name)
-  localStorage.setItem('avatar', avatar)
 }
 
 const ACTION_HANDLERS = {

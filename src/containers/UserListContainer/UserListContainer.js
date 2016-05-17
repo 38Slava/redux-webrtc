@@ -1,5 +1,5 @@
 import { Component, PropTypes } from 'react'
-import UserCard from 'components/UserCard'
+import UserCardContainer from 'containers/UserCardContainer'
 
 class UserListContainer extends Component {
   static propTypes = {
@@ -13,7 +13,7 @@ class UserListContainer extends Component {
       <div>
         {
           _.map(this.props.items, (item) => {
-            return (<UserCard key={item.name} {...item} />)
+            return (<UserCardContainer key={item.name} {...item} />)
           })
         }
       </div>
