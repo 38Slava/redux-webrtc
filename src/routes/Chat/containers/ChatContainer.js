@@ -1,13 +1,14 @@
 import { connect } from 'react-redux'
 import { initVideo } from '../modules/video'
+import ChatView from '../components/ChatView'
 import VideoContainer from 'containers/VideoContainer'
 
 const mapStateToProps = (state) => ({
-  video: state.chat.stream
+  users: state.users
 })
 
 const mapActionCreators = {
   initVideo
 }
 
-export default connect(mapStateToProps, mapActionCreators)(VideoContainer)
+export default connect(mapStateToProps, mapActionCreators)(ChatView)
