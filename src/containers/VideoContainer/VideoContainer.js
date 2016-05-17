@@ -16,7 +16,7 @@ class VideoContainer extends Component {
     }
     return (
       <div>
-
+        <WebRtc options={options} />
       </div>
     )
   }
