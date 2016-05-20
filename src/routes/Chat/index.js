@@ -5,7 +5,7 @@ export default (store) => ({
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const Video = require('./containers/ChatContainer').default
-      const reducer = require('./modules/video').default
+      const reducer = require('./modules/chat').default
 
       injectReducer(store, {key: 'chat', reducer})
 

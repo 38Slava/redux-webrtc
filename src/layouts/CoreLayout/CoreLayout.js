@@ -4,9 +4,9 @@ import classes from './CoreLayout.scss'
 import '../../styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
-  <div className='container text-center'>
+  <div className='container-fluid text-center' style={{height: '100%'}}>
     <Header />
-    <div className={classes.mainContainer}>
+    <div className={classes.mainContainer} style={{height: '100%'}}>
       {children}
     </div>
   </div>

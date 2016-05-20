@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex: 1;
+}
+
+.item {
+  flex: 1;
+  align-self: center;
+}
+
+.user {
+  flex: 1;
+  align-self: center;
+}
+
+.message {
+  flex: 7;
+  text-align: left;
+  align-self: center;
+  font-size: 1.9rem;
+  padding: 10px;
+  border-radius: 15px;
+  background: lighten(#17141F, 20%)
+}
