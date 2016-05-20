@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+}
+
+.input {
+  flex: 4;
+  background: #201C2B;
+  border: none;
+  height: 50px;
+  padding: 0 12px;
+}
+
+.button {
+  flex: 1;
+  background: #6441a4;
+  border: none;
+  color: #fff;
+  padding: 0 12px;
+  line-height: 30px;
+  &:hover {
+    background: #7550b9;
+  }
+}

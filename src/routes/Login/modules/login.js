@@ -6,6 +6,9 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
 
+export const SERVER_ADD_USER = 'server/ADD_USER'
+export const SOCKET_ADD_USER = 'socket/ADD_USER'
+
 export const loginRequst = () => {
   return {
     type: LOGIN_REQUEST
@@ -39,12 +42,20 @@ const loginPromise = (name) => {
   })
 }
 
+export const addUser = (response) => {
+  return {
+    type: SERVER_ADD_USER,
+    payload: response
+  }
+}
+
 export const login = (name) => {
   return async (dispatch) => {
     try {
       const data = await loginPromise(name)
       saveUser(data)
       dispatch(loginSuccess(data))
+      dispatch(addUser({ name }))
       dispatch(replace('/chat'))
     } catch (err) {
       console.log(err)
@@ -63,7 +74,11 @@ const ACTION_HANDLERS = {
     ...state,
     [action.payload.name]: action.payload
   }),
-  [LOGIN_FAIL]: (state, action) => state
+  [LOGIN_FAIL]: (state, action) => state,
+  [SOCKET_ADD_USER]: (state, action) => ({
+    ...state,
+    [action.payload.name]: action.payload
+  })
 }
 
 const loginReducer = (state = {}, action) => {
