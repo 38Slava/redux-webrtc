@@ -3,11 +3,11 @@ import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
 import createSocketIoMiddleware from 'redux-socket.io'
-import io from 'socket.io-client';
+import io from 'socket.io-client'
 
 export default (initialState = {}, history) => {
-  let socket = io('http://192.168.1.3:4000')
-  let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
+  const socket = io('http://192.168.1.3:4000')
+  const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/')
   // ======================================================
   // Middleware Configuration
   // ======================================================

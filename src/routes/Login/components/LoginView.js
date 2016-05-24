@@ -19,7 +19,7 @@ class LoginView extends Component {
           <button type='submit'>
             Log in
           </button>
-          </form>
+        </form>
       </div>
     )
   }

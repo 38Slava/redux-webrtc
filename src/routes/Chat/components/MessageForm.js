@@ -2,6 +2,9 @@ import { Component, PropTypes } from 'react'
 import classes from './MessageForm.scss'
 
 class MessageForm extends Component {
+  static propTypes = {
+    sendMessage: PropTypes.func
+  }
   handleSubmit (e) {
     e.preventDefault()
     let input = this.refs
@@ -16,7 +19,7 @@ class MessageForm extends Component {
           <button type='submit' className={classes.button}>
             Send
           </button>
-          </form>
+        </form>
       </div>
     )
   }

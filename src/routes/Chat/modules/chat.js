@@ -2,8 +2,8 @@ export const SEND_MESSAGE_REQUEST = 'SEND_MESSAGE_REQUEST'
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS'
 export const SEND_MESSAGE_FAIL = 'SEND_MESSAGE_FAIL'
 
-const SERVER_SEND_MESSAGE = 'server/SEND_MESSAGE';
-const SOCKET_SEND_MESSAGE = 'socket/SEND_MESSAGE';
+const SERVER_SEND_MESSAGE = 'server/SEND_MESSAGE'
+const SOCKET_SEND_MESSAGE = 'socket/SEND_MESSAGE'
 
 export const sendMessageRequest = () => {
   return {
@@ -76,7 +76,7 @@ const ACTION_HANDLERS = {
 
 const chatReducer = (state = [], action) => {
   const handler = ACTION_HANDLERS[action.type]
-  return handler ? handler(state, action): state
+  return handler ? handler(state, action) : state
 }
 
 export default chatReducer

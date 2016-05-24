@@ -1,6 +1,5 @@
-
-import randomAvatar from 'random-avatar'
 import { replace } from 'react-router-redux'
+import peer from 'peers'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -9,31 +8,27 @@ export const LOGIN_FAIL = 'LOGIN_FAIL'
 export const SERVER_ADD_USER = 'server/ADD_USER'
 export const SOCKET_ADD_USER = 'socket/ADD_USER'
 
-export const loginRequst = () => {
-  return {
-    type: LOGIN_REQUEST
-  }
-}
+export const loginRequst = () => ({
+  type: LOGIN_REQUEST
+})
 
-export const loginSuccess = (response) => {
-  return {
-    type: LOGIN_SUCCESS,
-    payload: response
-  }
-}
+export const loginSuccess = (response) => ({
+  type: LOGIN_SUCCESS,
+  payload: response
+})
 
-export const loginFail = (err) => {
-  return {
-    type: LOGIN_FAIL,
-    payload: err
-  }
-}
+export const loginFail = (err) => ({
+  type: LOGIN_FAIL,
+  payload: err
+})
 
 const loginPromise = (name) => {
   return new Promise((resolve, reject) => {
+    let peerId
     if (name) {
       resolve({
-        name
+        name,
+        peerId: peer.id
       })
     } else {
       let err = new Error('Name field is empty!')
@@ -42,12 +37,10 @@ const loginPromise = (name) => {
   })
 }
 
-export const addUser = (response) => {
-  return {
-    type: SERVER_ADD_USER,
-    payload: response
-  }
-}
+export const broadcastUser = (response) => ({
+  type: SERVER_ADD_USER,
+  payload: response
+})
 
 export const login = (name) => {
   return async (dispatch) => {
@@ -55,7 +48,7 @@ export const login = (name) => {
       const data = await loginPromise(name)
       saveUser(data)
       dispatch(loginSuccess(data))
-      dispatch(addUser({ name }))
+      dispatch(broadcastUser(data))
       dispatch(replace('/chat'))
     } catch (err) {
       console.log(err)
@@ -72,18 +65,18 @@ const ACTION_HANDLERS = {
   [LOGIN_REQUEST]: (state, action) => state,
   [LOGIN_SUCCESS]: (state, action) => ({
     ...state,
-    [action.payload.name]: action.payload
+    currentUser: action.payload
   }),
   [LOGIN_FAIL]: (state, action) => state,
   [SOCKET_ADD_USER]: (state, action) => ({
     ...state,
-    [action.payload.name]: action.payload
+    remoteUser: action.payload
   })
 }
 
 const loginReducer = (state = {}, action) => {
   const handler = ACTION_HANDLERS[action.type]
-  return handler ? handler(state, action): state
+  return handler ? handler(state, action) : state
 }
 
 export default loginReducer

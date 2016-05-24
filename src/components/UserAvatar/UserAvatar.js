@@ -2,7 +2,11 @@ import { Component, PropTypes } from 'react'
 
 class UserAvatar extends Component {
   static propTypes = {
-    name: PropTypes.string
+    name: PropTypes.string,
+    size: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ])
   }
   static defaultProps = {
     size: 100
@@ -12,7 +16,7 @@ class UserAvatar extends Component {
     let url = `https://robohash.org/${name}.png?size=${size}x${size}`
     return (
       <div>
-        <img src={url} alt="User avatar"/>
+        <img src={url} alt='User avatar' />
       </div>
     )
   }
