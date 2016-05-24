@@ -1,22 +1,20 @@
-import { Component } from 'react'
+import { Component, PropTypes } from 'react'
 
 class Video extends Component {
-  componentDidMount() {
-    console.log(this.refs)
+  static propTypes = {
+    src: PropTypes.string,
+    width: PropTypes.string
+  }
+  componentDidUpdate (prevProps, prevState) {
+    this.refs.video.play()
   }
   render () {
     return (
       <div>
-        <video ref='video' />
+        <video ref='video' src={this.props.src} volume='0' muted={true} width={this.props.width} />
       </div>
     )
   }
 }
-
-// const Video = (props) => (
-//   <div>
-//     <video />
-//   </div>
-// )
 
 export default Video

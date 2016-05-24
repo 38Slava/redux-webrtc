@@ -1,76 +1,94 @@
+import peer from 'peers'
+
 export const INIT_VIDEO_REQUEST = 'INIT_VIDEO_REQUEST'
 export const INIT_VIDEO_SUCCESS = 'INIT_VIDEO_SUCCESS'
 export const INIT_VIDEO_FAIL = 'INIT_VIDEO_FAIL'
 
-export const initVideoRequest = () => {
-  return {
-    type: INIT_VIDEO_REQUEST
-  }
-}
+const SERVER_SEND_BLOB = 'server/SEND_BLOB'
+const SOCKET_SEND_BLOB = 'socket/SEND_BLOB'
 
-export const initVideoSuccess = (stream) => {
-  return {
-    type: INIT_VIDEO_SUCCESS,
-    payload: stream
-  }
-}
+const CALL_SUCCESS = 'CALL_SUCCESS'
 
-export const initVideoFail = (err) => {
-  return {
-    type: INIT_VIDEO_FAIL,
-    payload: err
-  }
-}
+const ADD_REMOTE_BLOB = 'ADD_REMOTE_BLOB'
 
-// export const initVideo = () => {
-//   let constraints = {
-//     audio: false,
-//     video: true
-//   }
-//   let video = document.querySelector('video')
-//   console.log(video.srcObject)
-//   return async (dispatch) => {
-//     try {
-//       let stream = await navigator.mediaDevices.getUserMedia(constraints)
-//       let videoTracks = stream.getVideoTracks()
-//       video.srcObject = stream
-//       console.log(`Got stream with constraints ${JSON.stringify(constraints)}`)
-//       console.log(`Useing video device ${videoTracks[0].label}`)
-//       console.log(stream)
-//       dispatch(initVideoSuccess(stream))
-//     } catch (err) {
-//       dispatch(initVideoFail(err))
-//     }
-//   }
-// }
+export const initVideoRequest = () => ({
+  type: INIT_VIDEO_REQUEST
+})
+
+export const initVideoSuccess = (response) => ({
+  type: INIT_VIDEO_SUCCESS,
+  payload: response
+})
+
+export const initVideoFail = (err) => ({
+  type: INIT_VIDEO_FAIL,
+  payload: err
+})
+
+const broadcastBlob = (blob) => ({
+  type: SERVER_SEND_BLOB,
+  payload: blob
+})
 
 export const initVideo = () => {
   let constraints = {
-    audio: false,
+    audio: true,
     video: true
   }
-  let video = document.querySelector('video')
-  console.log(video.srcObject)
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then((stream) => {
-      let videoTracks = stream.getVideoTracks()
-      video.srcObject = stream
-      console.log(`Got stream with constraints ${JSON.stringify(constraints)}`)
-      console.log(`Useing video device ${videoTracks[0].label}`)
-      console.log(stream)
+  return async (dispatch) => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints)
+      const blob = URL.createObjectURL(stream)
+      // dispatch(broadcastBlob(blob))
+      dispatch(initVideoSuccess(blob))
+    } catch (err) {
+      console.log(err)
+      dispatch(initVideoFail(err))
+    }
+  }
+}
+
+export const callSuccess = () => ({
+  type: CALL_SUCCESS
+})
+
+export const addRemoteBlob = (blob) => ({
+  type: ADD_REMOTE_BLOB,
+  payload: blob
+})
+
+export const call = () => {
+  let constraints = {
+    audio: true,
+    video: true
+  }
+  return async (dispatch, getState) => {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints)
+    let remotePeerId = getState().users.remoteUser.peerId
+    console.log(`Remote peerId ${remotePeerId}`)
+    let call = peer.call(remotePeerId, stream)
+    call.on('stream', (remoteStream) => {
+      console.log(`Remote stream ${URL.createObjectURL(remoteStream)}`)
+      dispatch(addRemoteBlob(URL.createObjectURL(remoteStream)))
     })
-    .catch((err) => console.log(err))
+
+    dispatch(callSuccess())
+  }
 }
 
 const ACTION_HANDLERS = {
   [INIT_VIDEO_REQUEST]: (state, action) => state,
   [INIT_VIDEO_SUCCESS]: (state, action) => ({
     ...state,
-    stream: action.payload
+    blob: action.payload
   }),
   [INIT_VIDEO_FAIL]: (state, action) => ({
     ...state,
     error: action.payload
+  }),
+  [ADD_REMOTE_BLOB]: (state, action) => ({
+    ...state,
+    remoteBlob: action.payload
   })
 }
 

@@ -4,13 +4,14 @@ export default (store) => ({
   path: 'chat',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
-      const Video = require('./containers/ChatContainer').default
-      const reducer = require('./modules/chat').default
+      const Chat = require('./containers/ChatContainer').default
+      const chatReducer = require('./modules/chat').default
+      const videoReducer = require('./modules/video').default
 
-      injectReducer(store, {key: 'chat', reducer})
+      injectReducer(store, {key: 'chat', reducer: chatReducer})
+      injectReducer(store, {key: 'video', reducer: videoReducer})
 
-      cb(null, Video)
-
+      cb(null, Chat)
     }, 'chat')
   }
 })
